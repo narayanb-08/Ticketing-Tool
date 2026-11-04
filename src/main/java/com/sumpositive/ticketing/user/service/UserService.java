@@ -1,14 +1,18 @@
+
 package com.sumpositive.ticketing.user.service;
 
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
+import com.sumpositive.ticketing.common.exception.ResourceNotFoundException;
 import com.sumpositive.ticketing.user.entity.User;
 import com.sumpositive.ticketing.user.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -30,4 +34,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id));
+    }
 }
