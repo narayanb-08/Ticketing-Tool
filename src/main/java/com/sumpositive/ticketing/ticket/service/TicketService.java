@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.sumpositive.ticketing.common.exception.ResourceNotFoundException;
 import com.sumpositive.ticketing.ticket.entity.Ticket;
 import com.sumpositive.ticketing.ticket.mapper.TicketMapper;
 import com.sumpositive.ticketing.ticket.repository.TicketRepository;
@@ -31,8 +32,11 @@ public class TicketService {
     }
 
    
-    public Optional<Ticket> getTicketById(Long id) {
-        return ticketRepository.findById(id);
+    public Ticket getTicketByIdOrThrow(Long id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Ticket not found with id: " + id));
     }
 
   
@@ -41,13 +45,31 @@ public class TicketService {
     }
 
 
-    public Ticket updateTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
+
+public Ticket updateTicket(Ticket ticket) {
+
+    Long id = ticket.getId();
+
+    Ticket existingTicket = ticketRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Ticket not found with id: " + id));
+
+    ticket.setId(existingTicket.getId());
+
+    return ticketRepository.save(ticket);
+}
+
 
   
     public void deleteTicket(Long id) {
-        ticketRepository.deleteById(id);
+
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Ticket not found with id: " + id));
+
+        ticketRepository.delete(ticket);
     }
 
   
