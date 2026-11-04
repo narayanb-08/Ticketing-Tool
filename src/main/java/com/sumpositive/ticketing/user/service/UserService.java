@@ -1,17 +1,14 @@
-
 package com.sumpositive.ticketing.user.service;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import com.sumpositive.ticketing.user.entity.User;
 import com.sumpositive.ticketing.user.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    private  UserRepository userRepository;
+    private  final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
