@@ -32,11 +32,8 @@ public class TicketService {
     }
 
    
-    public Ticket getTicketByIdOrThrow(Long id) {
-        return ticketRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Ticket not found with id: " + id));
+    public Optional<Ticket> getTicketById(Long id) {
+        return ticketRepository.findById(id);
     }
 
   
